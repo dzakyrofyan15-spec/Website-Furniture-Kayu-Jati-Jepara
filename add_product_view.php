@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tambah Produk | MEBELISA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #333; 
+            --accent-color: #7E644E; 
+            --secondary-color: #666; 
+            --bg-light: #F9F7F5;
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Montserrat', sans-serif;
+            --shadow-subtle: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        body { 
+            background-color: var(--bg-light); 
+            font-family: var(--font-body); 
+            margin: 0; 
+            color: var(--primary-color);
+        }
+        .form-container { max-width: 700px; margin: 50px auto; padding: 40px; background: white; border-radius: 4px; box-shadow: var(--shadow-subtle); }
+        .form-container h1 { font-family: var(--font-heading); font-size: 32px; margin-bottom: 30px; text-align: center; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
+        .form-group input[type="text"], .form-group select, .form-group textarea, .form-group input[type="file"] {
+            width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; box-sizing: border-box;
+            background: #fcfcfc;
+        }
+        .form-group textarea { resize: vertical; min-height: 150px; }
+        .btn-submit { 
+            background-color: var(--accent-color); color: white; padding: 12px 25px; 
+            border: none; border-radius: 4px; cursor: pointer; font-weight: 600; 
+            transition: background-color 0.3s;
+        }
+        .btn-submit:hover { background-color: #554438; }
+        .alert-error { 
+            background-color: #F8D7DA; color: #721C24; padding: 10px; border-radius: 4px; 
+            margin-bottom: 20px; text-align: center; border: 1px solid #F5C6CB; 
+        }
+    </style>
+</head>
+<body>
+
+    <main class="form-container">
+        <h1>Tambah Produk Baru</h1>
+
+        <?php if(isset($error)): ?>
+            <div class="alert-error"><?php echo $error; ?></div>
+        <?php endif; ?>
+        
+        <?php echo validation_errors('<div class="alert-error">', '</div>'); ?>
+
+        <?php echo form_open_multipart('administrator/save'); ?>
+            
+            <div class="form-group">
+                <label for="nama_produk">Nama Produk:</label>
+                <input type="text" id="nama_produk" name="nama_produk" required value="<?php echo set_value('nama_produk'); ?>">
+            </div>
+
+            <div class="form-group">
+                <label for="id_kategori">Kategori:</label>
+                <select id="id_kategori" name="id_kategori" required>
+                    <option value="">-- Pilih Kategori --</option>
+                    <?php foreach ($categories as $cat): ?>
+                        <option value="<?php echo $cat['id_kategori']; ?>" <?php echo set_select('id_kategori', $cat['id_kategori']); ?>>
+                            <?php echo $cat['nama_kategori']; ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="deskripsi">Deskripsi Produk:</label>
+                <textarea id="deskripsi" name="deskripsi" required><?php echo set_value('deskripsi'); ?></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="gambar_utama">Gambar Utama (Wajib, Maks 5MB, JPG/PNG):</label>
+                <input type="file" id="gambar_utama" name="gambar_utama" required>
+            </div>
+
+            <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Simpan Produk</button>
+            <a href="<?php echo base_url('administrator'); ?>" style="color: var(--primary-color); margin-left: 20px;">Batal</a>
+            
+        <?php echo form_close(); ?>
+    </main>
+
+</body>
+</html>
